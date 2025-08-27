@@ -1,9 +1,9 @@
 import { useRoute } from '@react-navigation/native';
-import { View ,Text } from 'react-native';
+import { View ,Text, Image, FlatList } from 'react-native';
 import { useEffect,useState } from 'react';
 export default function PesquisasFilmes(){
 
-    const route = useRoute();
+   const route = useRoute();
    const[filmes,setFilmes] = useState([''])
 
    useEffect(()=>{
@@ -24,7 +24,7 @@ const options = {
 const response = await fetch(url,options)
 const data = await response.json()
 console.log(data.results)
-
+setFilmes(data.results)
 
 }
 
@@ -33,11 +33,21 @@ buscarFilmes();
    },[])
 
     
-return(
-<view>
-<Text> {route.params.Pesquisa} </Text>
-
-</view>
-
-)
-}
+   
+   return (
+       <View>
+           <FlatList
+           data={filmes}
+           keyExtractor={(item)=>item.id}
+           renderItem={({item})=>(
+               <View>
+                   <Text> filme:{item.title} </Text>
+                   <Text>nota :{item.vote_average}</Text>
+                   <Image style = {{width:"100%", height:150}} source={{uri:(`https://image.tmdb.org/t/p/original${item.poster_path}`)}}></Image>
+               </View>
+           )}>
+           </FlatList>
+          
+       </View>
+   )
+};
