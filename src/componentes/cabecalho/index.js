@@ -15,7 +15,7 @@ export default function Cabecalho() {
 
             </TouchableOpacity>
 
-            <Text style={styles.textHeader}> RLQ FILMES </Text>
+            <Text style={styles.textHeader}> KL ANIMES </Text>
 
         </View>
 

@@ -7,15 +7,22 @@ export default function Detalhes() {
     const route = useRoute();
     const navigation = useNavigation();
 
+    const { nome, imagem, elemento, raça } = route.params;
+
     return (
         <View style={styles.container}>
+            <Image style={styles.image} source={{ uri: route.params.imagem }} />
+         
 
-            <Image style={styles.image} source={{uri:`https://image.tmdb.org/t/p/original${route.params.imagem}`}}/>
+            <Text style={styles.name}>Nome: {nome}</Text>
 
-                <Text style={styles.name}> Nome: {route.params.titulo}</Text>
-                <Text style={styles.nota}>Nota: {route.params.nota}</Text>
-                <Text style={styles.sinopse}>Sinopse: {route.params.sinopse}</Text>
+            {elemento ? (
+                <Text style={styles.nota}>Elemento: {elemento}</Text>
+            ) : null}
 
+            {raça ? (
+                <Text style={styles.nota}>Raça: {raça}</Text>
+            ) : null}
         </View>
-    )
+    );
 }

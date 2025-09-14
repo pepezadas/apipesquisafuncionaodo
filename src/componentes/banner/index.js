@@ -3,8 +3,8 @@ import styles from './style.js'
 
 // Vetor img
 const imagens = [
-    require('../../../assets/CinemarkBanner1.jpg'),
-    require('../../../assets/CinemarkBanner2.jpg')
+    require('../../../assets/ANIM.png'),
+    require('../../../assets/ANIM.png'),
 ];
 
 // Escolhe aleatóriamente uma img
@@ -16,7 +16,7 @@ export default function Banner() {
         <>
             <Image style={styles.imageBanner} source={imagem} />
 
-            <Text style={styles.textBanner}> Filmes Em Exibição </Text>
+            <Text style={styles.textBanner}> ANIMES </Text>
         </>
     );
 

@@ -2,45 +2,51 @@ import { StyleSheet } from "react-native";
 
 const styles = StyleSheet.create({
     container: {
-        backgroundColor: 'black',
-        height: '100%',
-        alignItems: 'center'
+        backgroundColor: '#121212',
+        flex: 1,
+        alignItems: 'center',
+        paddingHorizontal: 20,
     },
 
     image: {
-        width: '260px',
-        height: '380px',
-        borderRadius: '50px',
-        border: '20px solid #a42022',
-        marginTop: '50px'
+        width: 260,
+        height: 260,
+        borderRadius: 20,
+        borderWidth: 4,
+        borderColor: '#E94444',
+        marginTop: 50,
+        resizeMode: 'contain',
+        backgroundColor: '#1e1e1e',
     },
 
-     name: {
+    name: {
         marginTop: 30,
         color: '#FFFFFF',
         fontSize: 28,
         fontWeight: 'bold',
         textAlign: 'center',
+        textTransform: 'capitalize',
     },
 
     nota: {
-        color: '#a42022', 
-        fontSize: 26,
+        color: '#FF6B6B',
+        fontSize: 20,
         fontWeight: '600',
-        marginTop: 8,
+        marginTop: 10,
+        textAlign: 'center',
+        textTransform: 'capitalize',
     },
 
     sinopse: {
-        marginTop: '30px',
-        color: '#DDDDDD',
+        marginTop: 30,
+        color: '#CCCCCC',
         width: '100%',
-        textAlign: 'justify',
-        fontSize: '14px',
+        fontSize: 16,
         backgroundColor: '#1E1E1E',
         padding: 15,
-        borderRadius: 20,
+        borderRadius: 12,
+        textAlign: 'justify',
     }
-
 });
 
 export default styles;

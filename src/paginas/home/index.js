@@ -1,271 +1,119 @@
-
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View, TouchableOpacity, TextInput, Image, FlatList } from 'react-native';
-import { Feather } from '@expo/vector-icons'
-import Cabecalho from '../../componentes/cabecalho/index.js'
-import Pesquisa from '../../componentes/barraPesquisa/index.js'
-import Banner from '../../componentes/banner/index.js'
-import Filmes from '../../componentes/data/filmes.js'
+import { StyleSheet, Text, View, ScrollView, FlatList } from 'react-native';
+import { useState, useEffect } from 'react';
+import Cabecalho from '../../componentes/cabecalho/index.js';
+import Pesquisa from '../../componentes/barraPesquisa/index.js';
+import Banner from '../../componentes/banner/index.js';
 import CardMovies from '../../componentes/cardsFilmes/index.js';
-import { ScrollView } from 'react-native-web';
-import { useState, useEffect, } from 'react';
 
 export default function Home() {
 
-
-  const [movies, setMovies] = useState([]);
-
-  useEffect(() => {
-
-
-    async function buscarFilmes() {
-
-
-      const url = 'https://api.themoviedb.org/3/movie/top_rated?language=pt-br-US&page=1';
-      const options = {
-        method: 'GET',
-        headers: {
-          accept: 'application/json',
-          Authorization: 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJkNzY1YzEyYzUyMWRiMTEzMjJmZDk1MDJlMWNlYzlmYyIsIm5iZiI6MTc1NTAyMTUxMi40NzksInN1YiI6IjY4OWI4MGM4MzVlMGUyZDIxMDZkNzRiZSIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.EAMFVwLizTgWASktiIgkzwldJO4_he776g98_jlTAY8'
-        }
-      };
-
-      const response = await fetch(url, options)
-      const data = await response.json();
-      console.log(data);
-
-      setMovies(data.results)
-
-    }
-    buscarFilmes();
-
-
-
-
-
-
-
-  }, [])
-
-  const [popular, setPopular] = useState([]);
+  const [dragonBall, setDragonBall] = useState([]);
+  const [pokemon, setPokemon] = useState([]);
 
   useEffect(() => {
-
-
-    async function buscarFilmes() {
-
-      const url = 'https://api.themoviedb.org/3/movie/popular?language=pt-br-US&page=1';
-      const options = {
-        method: 'GET',
-        headers: {
-          accept: 'application/json',
-          Authorization: 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJkNzY1YzEyYzUyMWRiMTEzMjJmZDk1MDJlMWNlYzlmYyIsIm5iZiI6MTc1NTAyMTUxMi40NzksInN1YiI6IjY4OWI4MGM4MzVlMGUyZDIxMDZkNzRiZSIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.EAMFVwLizTgWASktiIgkzwldJO4_he776g98_jlTAY8'
-        }
-      };
-
-
-      const response = await fetch(url, options)
-      const data = await response.json();
-      console.log(data);
-
-      setPopular(data.results)
-
+    async function buscarPersonagensDragonBall() {
+      try {
+        const response = await fetch('https://dragonball-api.com/api/characters');
+        const data = await response.json();
+        setDragonBall(data.items);
+      } catch (error) {
+        console.error("Erro ao buscar personagens de Dragon Ball:", error);
+      }
     }
-    buscarFilmes();
-
-
-
-
-
-
-
-  }, [])
-
-  const [avaliado, setAvaliado] = useState([]);
+    buscarPersonagensDragonBall();
+  }, []);
 
   useEffect(() => {
+    async function buscarPokemon() {
+      try {
+        const response = await fetch('https://pokeapi.co/api/v2/pokemon?limit=10');
+        const data = await response.json();
 
+        const pokemonDetails = await Promise.all(
+          data.results.map(async (pokemon) => {
+            const res = await fetch(pokemon.url);
+            const details = await res.json();
+            return {
+              name: details.name,
+              type: details.types.map(t => t.type.name).join(', '),
+              image: details.sprites.front_default,
+            };
+          })
+        );
 
-    async function buscarFilmes() {
-
-      const url = 'https://api.themoviedb.org/3/movie/now_playing?language=pt-br-US&page=1';
-      const options = {
-        method: 'GET',
-        headers: {
-          accept: 'application/json',
-          Authorization: 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJkNzY1YzEyYzUyMWRiMTEzMjJmZDk1MDJlMWNlYzlmYyIsIm5iZiI6MTc1NTAyMTUxMi40NzksInN1YiI6IjY4OWI4MGM4MzVlMGUyZDIxMDZkNzRiZSIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.EAMFVwLizTgWASktiIgkzwldJO4_he776g98_jlTAY8'
-        }
-      };
-
-
-      const response = await fetch(url, options)
-      const data = await response.json();
-      console.log(data);
-
-      setAvaliado(data.results)
-
+        setPokemon(pokemonDetails);
+      } catch (error) {
+        console.error("Erro ao buscar Pokémons:", error);
+      }
     }
-    buscarFilmes();
 
-
-
-
-
-
-
-  }, [])
-
-  const [lancamento, setLancamento] = useState([]);
-
-  useEffect(() => {
-
-
-    async function buscarFilmes() {
-
-      const url = 'https://api.themoviedb.org/3/movie/upcoming?language=pt-br-US&page=1';
-      const options = {
-        method: 'GET',
-        headers: {
-          accept: 'application/json',
-          Authorization: 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJkNzY1YzEyYzUyMWRiMTEzMjJmZDk1MDJlMWNlYzlmYyIsIm5iZiI6MTc1NTAyMTUxMi40NzksInN1YiI6IjY4OWI4MGM4MzVlMGUyZDIxMDZkNzRiZSIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.EAMFVwLizTgWASktiIgkzwldJO4_he776g98_jlTAY8'
-        }
-      };
-
-
-      const response = await fetch(url, options)
-      const data = await response.json();
-      console.log(data);
-
-      setLancamento(data.results)
-
-    }
-    buscarFilmes();
-
-
-
-
-
-
-
-  }, [])
-
-
-
+    buscarPokemon();
+  }, []);
 
   return (
     <ScrollView style={styles.container}>
-
       <View style={styles.containerImports}>
 
         <Cabecalho />
-
         <Pesquisa />
-
         <Banner />
 
         <View style={{ width: "90%" }}>
 
+          <Text style={styles.textHome}>Dragon Ball</Text>
           <FlatList
-
+            horizontal
             showsHorizontalScrollIndicator={false}
-
-            horizontal={true}
-
-            data={movies}
-
-            keyExtractor={(item) => item.id}
+            data={dragonBall}
+            keyExtractor={(item) => item.id.toString()}
             renderItem={({ item }) => (
-
-              <CardMovies titulo={item.title} nota={item.vote_average} imagem={item.poster_path} sinopse={item.overview} />
-
+              <CardMovies
+                nome={item.name}
+                raça={item.race}
+                imagem={item.image}
+                sinopse={item.description}
+              />
             )}
-
           />
 
-          <Text style={styles.textHome}> Populares </Text>
-
+          <Text style={styles.textHome}>Pokémon</Text>
           <FlatList
-
+            horizontal
             showsHorizontalScrollIndicator={false}
-
-            horizontal={true}
-
-            data={popular}
-
-            keyExtractor={(item) => item.id}
+            data={pokemon}
+            keyExtractor={(item) => item.name}
             renderItem={({ item }) => (
-
-              <CardMovies titulo={item.title} nota={item.vote_average} imagem={item.poster_path} sinopse={item.overview} />
-
+              <CardMovies
+                nome={item.name}
+                elemento={item.type}
+                imagem={item.image}
+              />
             )}
-
-          />
-
-          <Text style={styles.textHome}> Bem Avaliados </Text>
-
-          <FlatList
-
-            showsHorizontalScrollIndicator={false}
-
-            horizontal={true}
-
-            data={avaliado}
-
-            keyExtractor={(item) => item.id}/*  */
-            renderItem={({ item }) => (
-
-              <CardMovies titulo={item.title} nota={item.vote_average} imagem={item.poster_path} sinopse={item.overview} />
-
-            )}
-
-          />
-
-          <Text style={styles.textHome}> Em Breve </Text>
-
-          <FlatList
-
-            showsHorizontalScrollIndicator={false}
-
-            horizontal={true}
-
-            data={lancamento}
-
-            keyExtractor={(item) => item.id}/*  */
-            renderItem={({ item }) => (
-
-              <CardMovies titulo={item.title} nota={item.vote_average} imagem={item.poster_path} sinopse={item.overview} />
-
-            )}
-
           />
 
         </View>
-
       </View>
-
     </ScrollView>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: 'black',
+    backgroundColor: '#2e1f1c',
     width: '100%',
-    height: '100%'
+    height: '100%',
   },
-
   textHome: {
     fontSize: 30,
     color: "white",
     marginTop: 15,
     marginLeft: 0,
-    fontWeight: 'bold'
+    fontWeight: 'bold',
   },
-
   containerImports: {
     display: 'flex',
     flexDirection: 'column',
-    alignItems: 'center'
-  }
-
+    alignItems: 'center',
+  },
 });
